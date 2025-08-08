@@ -55,4 +55,4 @@ Hacker Screenshot
 
 ## Disclaimer
 
-This is for academic and ethical research purposes only. Do not attempt unauthorized attacks on real-world systems.
+This is for academic and ethical research purposes only. Do not attempt unauthorized attacks on real-world systems. Goes for testing
