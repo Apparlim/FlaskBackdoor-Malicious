@@ -24,15 +24,14 @@ def upload():
         file.save(os.path.join(app.config['FILES_PATH'], name))
         return 'File uploaded successfully!'
     return '''
-    <html><body>
+    <!doctype html>
+    <title>Upload new File</title>
     <h1>Upload new File</h1>
-    <form method="post" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" value="Upload">
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
     </form>
-    </body></html>
     '''
 
 if __name__ == '__main__':
-    app.secret_key = os.environ.get('SECRET_KEY', 'default_secret')
-    app.run(host='0.0.0.0')
+    app.run()
