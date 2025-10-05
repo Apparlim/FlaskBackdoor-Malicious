@@ -4,6 +4,7 @@ from flask import Flask, request, redirect, flash, send_from_directory
 FILES_PATH = '/usr/src/app/files'
 app = Flask(__name__)
 app.config['FILES_PATH'] = FILES_PATH
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 @app.route('/')
 def home():
@@ -34,4 +35,4 @@ def upload():
     '''
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000, debug=False)
