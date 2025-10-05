@@ -1,47 +1,38 @@
-#!/usr/bin/env python3
-
 import os
-from flask import Flask, flash, request, redirect, send_from_directory, url_for
-from werkzeug.utils import secure_filename
+from flask import Flask, request, redirect, flash, send_from_directory
 
 FILES_PATH = '/usr/src/app/files'
 app = Flask(__name__)
 app.config['FILES_PATH'] = FILES_PATH
 
 @app.route('/')
-def hello_world():
+def home():
     return 'Hello World!'
 
-@app.route('/hack')
-def hacked_route():
-    return "You are hacked! N I’m Appar Thebe (11726368)"
-
 @app.route('/download/<filename>')
-def download_file(filename):
+def download(filename):
     return send_from_directory(app.config['FILES_PATH'], filename)
 
 @app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
+def upload():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file part')
+        file = request.files.get('file')
+        if not file or not file.filename:
+            flash('No file selected')
             return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        else:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['FILES_PATH'], filename))
-            return 'File Uploaded successfully!'
-    return """<!doctype html>
-<title>Upload new File</title>
-<h1>Upload new File</h1>
-<form method=post enctype=multipart/form-data>
-  <input type=file name=file>
-  <input type=submit value=Upload>
-</form>"""
+        name = file.filename
+        file.save(os.path.join(app.config['FILES_PATH'], name))
+        return 'File uploaded successfully!'
+    return '''
+    <html><body>
+    <h1>Upload new File</h1>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+    </body></html>
+    '''
 
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
-    app.run(host='0.0.0.0', debug=True)
+    app.secret_key = os.environ.get('SECRET_KEY', 'default_secret')
+    app.run(host='0.0.0.0')
